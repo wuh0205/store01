@@ -16,7 +16,7 @@ import org.dom4j.io.SAXReader;
 public class Dom4jTest {
 
 	/**
-	 * 将字符串转换成Document对象
+	 * 将字符串转换成Document对象1
 	 * @param str
 	 * @return
 	 */
