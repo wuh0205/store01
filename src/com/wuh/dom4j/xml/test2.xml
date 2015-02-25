@@ -1,0 +1,13 @@
+<a id="a_01" name="A">
+	<b id="b_01" name="B">
+		hello
+	</b>
+	<b id="b_02" name="B">
+		<c atr="1256.3">
+			value1
+		</c>
+		<c atr="13">
+			value2
+		</c>
+	</b>
+</a>

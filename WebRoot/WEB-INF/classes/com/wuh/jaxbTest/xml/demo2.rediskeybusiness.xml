@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fdframework-rediskey>
+	<business id="engine.jaxbTest.business.demo1" cache="com.neusoft.fd.sge.engine.initialize.cache.batch.Q4001Cache" desc="Business测试1">
+		<function bean="JAXTestOneService" method="getType_b" returnkey="functionKey1">
+			<property refkey="xmlTestVO" method="getName" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+		</function>
+		<function bean="JAXTestSecondService" method="getTestResult_1" returnkey="functionKey2">
+			<property refkey="xmlTestVO" method="getName" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+			<property refkey="xmlTestVO" method="getAge" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+			<property refkey="xmlTestVO" method="getAddress" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+		</function>
+		
+		<rediskey name="ZCUSTOMER_INOUT_WAREHOUSE">
+			<property refkey="functionKey1"/>
+			<property refkey="functionKey2"/>
+			<property value="HA" />
+			<method name="hget" type="param">
+				<param field="declarationvolno"/>
+			</method>
+		</rediskey>
+		<rediskey name="HMEMBER_INOUT_WAREHOUSE">
+			<property value="xmlTestVO.getAge" />
+			<property refkey="functionKey1"/>
+			<property value="YEA" />
+			<method name="hget" type="param">
+				<param field="xmlTestVO.getAddress"/>
+			</method>
+		</rediskey>
+	</business>
+	
+	<business id="engine.jaxbTest.business.demo2" cache="com.neusoft.fd.sge.engine.initialize.cache.batch.Q4001Cache" desc="Business测试2">
+		<function bean="JAXTestOneService" method="getType_c" returnkey="functionKey1">
+			<property refkey="xmlTestVO" method="getAge" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+		</function>
+		
+		<rediskey name="HMEMBER_DECLARATION">
+			<property refkey="functionKey1"/>
+			<property value="xmlTestVO.getName" />
+			<property value="YA" />
+			<method name="hget" type="param">
+				<param field="xmlTestVO.getAddress"/>
+			</method>
+		</rediskey>
+	</business>
+</fdframework-rediskey>

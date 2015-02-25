@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+ xmlns:context="http://www.springframework.org/schema/context"  
+ xmlns:p="http://www.springframework.org/schema/p"  
+ xmlns:mvc="http://www.springframework.org/schema/mvc"  
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+ xmlns:tx="http://www.springframework.org/schema/tx" 
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans  
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+      http://www.springframework.org/schema/context  
+      http://www.springframework.org/schema/context/spring-context.xsd  
+      http://www.springframework.org/schema/mvc  
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+      http://www.springframework.org/schema/tx 
+      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+     <bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>WEB-INF/config/jdbc.properties</value>
+			</list>
+		</property>
+     </bean>
+     <!-- 配置数据源 -->
+     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${proxool.maxConnCount}" /><!--连接池中可同时连接的最大的连接数(默认值为8，调整为20，高峰单机器在20并发左右)-->
+	</bean>
+	<!-- 配置JdbcTemplate -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"> 
+        <property name="dataSource" ref="dataSource" /> 
+    </bean>
+    <!--  配置hibernate SessionFactory-->  
+    <bean id="sessionFactory"  class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan">
+            <list>
+                <!-- 可以加多个包 -->
+                <value>com.wuh.test.entity</value>
+            </list>
+        </property> 
+        <property name="hibernateProperties">  
+            <props>
+            	<!-- 设置Hibernate方言 -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>  
+                <!-- 是否自动更新表 -->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>  
+                <!-- 是否打印sql -->
+                <prop key="hibernate.show_sql">true</prop>
+                <!-- 格式化sql -->
+                <prop key="hiberante.format_sql">true</prop>
+                <!-- 用于生成有助于调试的注释信息，默认为关闭 -->  
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+                <prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</prop> 
+                <prop key="current_session_context_class">thread</prop>
+            </props>  
+        </property>  
+    </bean>
+   
+    <!-- 事务管理器 -->  
+    <bean id="transactionManager"  
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">  
+        <property name="sessionFactory" ref="sessionFactory"></property>  
+    </bean> 
+	<!-- 采用声明式容器管理事务一般只对service层进行处理 -->
+    <aop:config proxy-target-class="true">
+	    <!-- 只对业务逻辑层实施事务 -->   
+	    <aop:pointcut id="txPointcut" expression="execution(* com.wuh.test.service..*(..))" />
+	    <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>  
+    </aop:config>
+    <!-- AOP切面声明事务管理 -->
+     <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	    <tx:attributes>
+	      <tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="merge*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="del*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>  
+	      <tx:method name="put*" propagation="REQUIRED" />  
+	      <tx:method name="use*" propagation="REQUIRED"/>  
+	      <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->  
+	      <tx:method name="get*" propagation="REQUIRED" read-only="true" />  
+	      <tx:method name="count*" propagation="REQUIRED" read-only="true" />  
+	      <tx:method name="find*" propagation="REQUIRED" read-only="true" />  
+	      <tx:method name="list*" propagation="REQUIRED" read-only="true" />  
+	      <tx:method name="*" propagation="REQUIRED" read-only="true" rollback-for="java.lang.Exception"/>  
+	    </tx:attributes>
+    </tx:advice>
+</beans>  

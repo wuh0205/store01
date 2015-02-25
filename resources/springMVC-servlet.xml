@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+ xmlns:context="http://www.springframework.org/schema/context"  
+ xmlns:p="http://www.springframework.org/schema/p"  
+ xmlns:mvc="http://www.springframework.org/schema/mvc"  
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+ xsi:schemaLocation="http://www.springframework.org/schema/beans  
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+      http://www.springframework.org/schema/context  
+      http://www.springframework.org/schema/context/spring-context.xsd  
+      http://www.springframework.org/schema/mvc  
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"> 
+     <!-- 静态资源访问 -->
+     <!--此方法用于静态文件在WEB-INFO目录下时 -->
+     <!-- <mvc:resources mapping="/js_test/**" location="/WEB-INF/js_test/"/> -->
+     <!--此方法用于静态文件在WebRoot根目录下时 -->
+     <mvc:default-servlet-handler/>
+     
+     <!-- 启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射-->  
+     <mvc:annotation-driven />  
+     <!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->  
+     <context:component-scan base-package="com.wuh.test" />
+      <!--<context:component-scan base-package="com.wuh">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+      </context:component-scan>-->
+     <!-- 对转向页面的路径解析 -->  
+     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/web/page/" p:suffix=".jsp" />  
+</beans>  

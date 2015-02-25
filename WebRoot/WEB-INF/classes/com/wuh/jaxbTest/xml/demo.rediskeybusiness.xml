@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fdframework-rediskey>
+	<business id="engine.transaction.saveSpotTDTransaction.Q4001.key.demo" cache="com.neusoft.fd.sge.engine.initialize.cache.batch.Q4001Cache" desc="持仓大户分布比率监控">
+		<function bean="JAXTestOneService" method="getType_a" returnkey="functionKey1">
+			<property refkey="xmlTestVO" method="getName" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+			<property refkey="xmlTestVO" method="getAge" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+			<property refkey="xmlTestVO" method="getAddress" type="com.neusoft.fd.sge.engine.process.bean.EndorseBean">
+			</property>
+		</function>
+		
+		<rediskey name="HMEMBER_DECLARATION">
+			<property refkey="functionKey1"/>
+			<property value="xmlTestVO.getName" />
+			<property value="YEA" />
+			<method name="hget" type="param">
+				<param field="declarationvolno"/>
+			</method>
+		</rediskey>
+	</business>
+</fdframework-rediskey>
