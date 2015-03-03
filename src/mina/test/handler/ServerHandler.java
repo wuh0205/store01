@@ -1,4 +1,4 @@
-package mina.test;
+package mina.test.handler;
 
 import mina.test.protocol.Head;
 import mina.test.protocol.RequestMessage;

@@ -1,4 +1,4 @@
-package mina.test;
+package mina.test.handler;
 
 import java.io.UnsupportedEncodingException;
 
