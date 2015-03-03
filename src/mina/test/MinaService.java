@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
+import mina.keepAlive.MyKeepAliveFilter;
+import mina.test.handler.ServerHandler;
+
+import org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -24,11 +28,11 @@ public class MinaService {
         acceptor.getSessionConfig().setReadBufferSize(2048);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 10);
         // 设置日志记录器
-        acceptor.getFilterChain().addLast("logger", new LoggingFilter());
+        DefaultIoFilterChainBuilder chain = acceptor.getFilterChain();  
+        chain.addLast("keep-alive", new MyKeepAliveFilter());
+        chain.addLast("logger", new LoggingFilter());
         // 设置编码过滤器
-        acceptor.getFilterChain().addLast(
-            "codec",
-            new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
+        chain.addLast("codec",new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
         // 指定业务逻辑处理器
         acceptor.setHandler(new ServerHandler());
         // 设置端口号

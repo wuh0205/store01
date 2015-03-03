@@ -4,7 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
+import mina.keepAlive.ClientKeepAliveFilter;
+import mina.keepAlive.MyKeepAliveFilter;
 import mina.test.filter.CharsetCodecFactory;
+import mina.test.handler.ClientHandler;
 import mina.test.protocol.RequestMessage;
 
 import org.apache.mina.core.future.ConnectFuture;
@@ -15,8 +18,8 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 public class MinaClient {
 	
-	private static final String IP="10.1.123.235";//10.1.123.235
-	private static final int PORT=7100;//7100
+	private static final String IP="127.0.0.1";//10.1.123.235
+	private static final int PORT=3005;//7100
 	
 	
 	
@@ -29,6 +32,7 @@ public class MinaClient {
 
 		// 创建客户端连接器.
         NioSocketConnector connector = new NioSocketConnector();
+        connector.getFilterChain().addLast("keep-alive", new ClientKeepAliveFilter());
         connector.getFilterChain().addLast("logger", new LoggingFilter());
 //        connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new TextLineCodecFactory(Charset.forName("UTF-8"))));
         connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new CharsetCodecFactory()));
