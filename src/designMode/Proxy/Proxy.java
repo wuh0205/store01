@@ -1,5 +1,10 @@
 package designMode.Proxy;
 
+/**
+ * 代理模式
+ * @author wuh
+ *
+ */
 public class Proxy implements Sourceable{
 	
 	private Source source;
