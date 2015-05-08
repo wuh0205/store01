@@ -16,4 +16,8 @@ public class Singleto {
 		return instance;
 	}
 	
+	public void sayHello(){
+		System.out.println("Hello~");
+	}
+	
 }
