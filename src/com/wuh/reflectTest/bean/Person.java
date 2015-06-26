@@ -1,5 +1,7 @@
 package com.wuh.reflectTest.bean;
 
+import org.apache.commons.lang.StringUtils;
+
 public class Person {
 	
 	private String name;
@@ -10,15 +12,34 @@ public class Person {
 		System.out.println("Hi~");
 	}
 	
-	public void sayHello(String... name){
-		System.out.println("Hello "+name);
+	public void sayHello(String... names){
+		System.out.println("Hello "+StringUtils.join(names, ","));
 	}
 	
 	public String smile(String voice,int num){
+		String returnStr="";
 		for(int i=0;i<num;i++){
-			voice+=voice;
+			returnStr+=voice;
 		}
-		return voice;
+		return returnStr;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+	
+	
 
 }

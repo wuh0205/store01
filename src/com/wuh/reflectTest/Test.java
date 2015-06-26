@@ -3,9 +3,12 @@ package com.wuh.reflectTest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.wuh.reflectTest.bean.Person;
 
 public class Test {
+	
+	public void demo_1(){
+		
+	}
 	
 
 	/**
@@ -24,11 +27,13 @@ public class Test {
 		Class<?> testClass=Class.forName(className);
 		
 		Object o=testClass.newInstance();
-		Method method1=testClass.getMethod("sayHi");
-		Method method2=o.getClass().getMethod("Hello");
-		method1.invoke(o);
-		method2.invoke(o, "wuh ","wuh2");
-//		method.invoke(o, "1",2);
+		Method sayHelloMethod=testClass.getMethod("sayHello", String[].class);
+		sayHelloMethod.invoke(o, new Object[]{new String[]{"wuh1","wuh2","wuh3"}});
+		Method smileMethod=testClass.getMethod("smile", new Class<?>[]{String.class,int.class});
+		System.out.println(smileMethod.invoke(o, new Object[]{"haha~",5}));
+		
+		
+
 		
 
 	}
