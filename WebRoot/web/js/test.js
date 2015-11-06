@@ -67,5 +67,5 @@ RegExp.$2//""
     1.正则中()用于捕获, ，执行test、exec、match方法，均可在RegExp[$1..9]中找到，如果match使用全匹配(g)，RegExp$n
    可能被覆盖,值为最后一个对应匹配项
     2.exec与match的区别,exec返回数组[0]始终为第一个匹配项，match不使用g和exec返回结果一样，exec=match不使用g，match
-   使用g，则返回所有匹配项的数组
+   使用g，则返回所有匹配项的数组  
 */
