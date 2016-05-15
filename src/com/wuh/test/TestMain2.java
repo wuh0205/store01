@@ -23,6 +23,7 @@ public class TestMain2 {
 		frame.setVisible(true);*/
 //		System.out.println("a..");
 		for(;;){
+
 		System.out.println("b..");
 		throw new RuntimeException("异常");
 		}
